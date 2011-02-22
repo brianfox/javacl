@@ -17,37 +17,58 @@ import java.util.ArrayList;
 
 
 
+/**
+ * Tests base class CheckedOption for proper handling of optional
+ * options, optional arguments, flags, and stacked flags.
+ * 
+ * @author Brian Fox
+ */
 public class CheckedOptionTest {
 
+	// moniker for indicating a mandatory field
 	private static final boolean MANDATORY = true;
 	
 	
-	public String pad(String s, int len) {
+	// pretty print
+	private String pad(String s, int len) {
 		while (s.length() < len)
 			s += "          ";
 		return s.substring(0, len-1);
 	}
 	
-	public void print(String s, int len) {
+
+	// pretty print
+	private void print(String s, int len) {
 		System.out.print(pad(s,len));
 	}
 
-	public static void print(String s) {
+	
+	// pretty print
+	private static void print(String s) {
 		System.out.print(s);
 	}
 
+	
+	// pretty print
 	@BeforeClass
     public static void pre() {
         print(String.format("Test Class: CheckedOptionTest%n"));        
         print(String.format("-----------------------------%n"));        
     }
-	
 
+	
+	// pretty print
 	@AfterClass
     public static void post() {
         print(String.format("%n%n%n"));                
     }
 	
+	
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws CommandLineException
+	 */
 	@Test
 	public void test_mandatory() throws CommandLineException {
 		ArrayList<CheckedOption> options;
@@ -154,6 +175,11 @@ public class CheckedOptionTest {
 	}
 
 
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws CommandLineException
+	 */
 	@Test 
 	public void test_flags() throws CommandLineException {
 		ArrayList<CheckedOption> options;
@@ -218,6 +244,11 @@ public class CheckedOptionTest {
 	}
 
 	
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws CommandLineException
+	 */
 	@Test 
 	public void test_stacked_flags() throws CommandLineException {
 		ArrayList<CheckedOption> options;

@@ -14,26 +14,41 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Tests BooleanOption for correct handling of permitted argument
+ * values (y, yes, true, t, no, n, false, f, 0, and 1).  Also 
+ * checks invalid arguments. 
+ * 
+ * @author Brian Fox
+ */
 public class BooleanOptionTest {
 
+	
+	// moniker for indicating a mandatory field
 	private static final boolean MANDATORY = true;
 	
 	
-	public String pad(String s, int len) {
+	// pretty print
+	private String pad(String s, int len) {
 		while (s.length() < len)
 			s += "          ";
 		return s.substring(0, len-1);
 	}
 	
-	public void print(String s, int len) {
+	
+	// pretty print
+	private void print(String s, int len) {
 		System.out.print(pad(s,len));
 	}
 
+	
+	// pretty print 
 	public static void print(String s) {
 		System.out.print(s);
 	}
 
 	
+	// convenience method for creating a temp file path
 	public String getTempFilePath() throws IOException {
 		File f = File.createTempFile("unit_test", "");
 		f.delete();
@@ -41,20 +56,28 @@ public class BooleanOptionTest {
 	}
 	
 	
+	// pretty print
 	@BeforeClass
     public static void pre() {
         print(String.format("Test Class: BooleanOptionTest%n"));        
         print(String.format("-----------------------------%n"));        
     }
 	
-
+	
+	// pretty print
 	@AfterClass
     public static void post() {
         print(String.format("%n%n%n"));                
     }
 
-	
-	public void simpleTest(String title, String argument, boolean expected) throws OptionDefinitionException {
+
+	// template test method: we expect good results here 
+	public void simpleTest(
+			String title, 
+			String argument, 
+			boolean expected
+	) throws OptionDefinitionException {
+
 		ArrayList<CheckedOption> options;
 		BooleanOption bo;
 		Boolean b;
@@ -74,7 +97,13 @@ public class BooleanOptionTest {
 	}
 	
 	
-	public void badTest(String title, String argument, boolean expected) throws OptionDefinitionException {
+	// template test method: we expect an exception here
+	public void badTest(
+			String title, 
+			String argument, 
+			boolean expected
+	) throws OptionDefinitionException {
+
 		ArrayList<CheckedOption> options;
 		BooleanOption bo;
 
@@ -87,11 +116,19 @@ public class BooleanOptionTest {
 			fail("Expected an error to be throw.");
 		}
 		catch (Exception e) {
-			print(String.format("Result: Error thrown: %s%n", e.getMessage()));
+			print(String.format(
+					"Result: Error thrown: %s%n", e.getMessage()
+			));
 		}
 	}
 
 	
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */
 	@Test
 	public void test_basic() throws OptionDefinitionException, IOException {
 		print(String.format("TESTING NEGATIVE FUNCTIONALITY:%n"));
@@ -103,23 +140,23 @@ public class BooleanOptionTest {
 		print(String.format("%n%n"));
 
 		print(String.format("TESTING POSITIVE FUNCTIONALITY:%n"));
-		simpleTest("Test 2A: Negative", "1", true);
-		simpleTest("Test 2B: Negative", "y", true);
-		simpleTest("Test 2C: Negative", "yes", true);
-		simpleTest("Test 2D: Negative", "t", true);
-		simpleTest("Test 2E: Negative", "true", true);
+		simpleTest("Test 2A: Positive", "1", true);
+		simpleTest("Test 2B: Positive", "y", true);
+		simpleTest("Test 2C: Positive", "yes", true);
+		simpleTest("Test 2D: Positive", "t", true);
+		simpleTest("Test 2E: Positive", "true", true);
 		print(String.format("%n%n"));
 
 		print(String.format("TESTING CASE SENSITIVITY:%n"));
-		simpleTest("Test 3A: Negative", "Y", true);
-		simpleTest("Test 3B: Negative", "yeS", true);
-		simpleTest("Test 3C: Negative", "T", true);
-		simpleTest("Test 3D: Negative", "trUe", true);
+		simpleTest("Test 3A: Positive", "Y", true);
+		simpleTest("Test 3B: Positive", "yeS", true);
+		simpleTest("Test 3C: Positive", "T", true);
+		simpleTest("Test 3D: Positive", "trUe", true);
 		print(String.format("%n%n"));
 
 		print(String.format("TESTING BAD VALUES:%n"));
-		badTest("Test 4A: Negative", "2", true);
-		badTest("Test 4B: Negative", "BAD", true);
+		badTest("Test 4A: Bad", "2", true);
+		badTest("Test 4B: Bad", "BAD", true);
 		print(String.format("%n%n"));
 	}
 

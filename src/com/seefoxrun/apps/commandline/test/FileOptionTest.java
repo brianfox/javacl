@@ -10,6 +10,7 @@ import org.junit.* ;
 
 import com.seefoxrun.apps.commandline.parser.Parser;
 import com.seefoxrun.apps.commandline.parser.exceptions.CommandLineException;
+import com.seefoxrun.apps.commandline.parser.exceptions.OptionDefinitionException;
 import com.seefoxrun.apps.commandline.parser.options.CheckedOption;
 import com.seefoxrun.apps.commandline.parser.options.FileOption;
 
@@ -22,23 +23,28 @@ public class FileOptionTest {
 
 	private static final boolean MANDATORY = true;
 	
-	
-	public String pad(String s, int len) {
+	// pretty print
+	private String pad(String s, int len) {
 		while (s.length() < len)
 			s += "          ";
 		return s.substring(0, len-1);
 	}
 	
-	public void print(String s, int len) {
+	
+	// pretty print
+	private void print(String s, int len) {
 		System.out.print(pad(s,len));
 	}
 
-	public static void print(String s) {
+	
+	// pretty print
+	private static void print(String s) {
 		System.out.print(s);
 	}
 
 	
-	public String getTempFilePath() throws IOException {
+	// pretty print
+	private String getTempFilePath() throws IOException {
 		File f = File.createTempFile("unit_test", "");
 		f.delete();
 		return f.getPath() + ".file";
@@ -58,6 +64,12 @@ public class FileOptionTest {
     }
 
 	
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */
 	@Test
 	public void test_basic() throws IOException, CommandLineException {
 		ArrayList<CheckedOption> options;
@@ -116,6 +128,12 @@ public class FileOptionTest {
 	}
 
 
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */
 	@Test
 	public void test_mustExist() throws IOException, CommandLineException {
 		print(String.format("TESTING EXISTANCE CHECKS:%n"));
@@ -186,6 +204,12 @@ public class FileOptionTest {
 	}
 
 
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */
 	@Test
 	public void test_create() throws IOException, CommandLineException {
 		print(String.format("TESTING CREATION:%n"));

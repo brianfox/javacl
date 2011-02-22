@@ -10,6 +10,7 @@ import org.junit.* ;
 
 import com.seefoxrun.apps.commandline.parser.Parser;
 import com.seefoxrun.apps.commandline.parser.exceptions.CommandLineException;
+import com.seefoxrun.apps.commandline.parser.exceptions.OptionDefinitionException;
 import com.seefoxrun.apps.commandline.parser.options.CheckedOption;
 import com.seefoxrun.apps.commandline.parser.options.DirOption;
 
@@ -17,32 +18,47 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+/**
+ * Tests DirOption class for correct handling of directory
+ * existence checks, dir creation, and basic functionality.
+ * 
+ * @author brianfox
+ */
 public class DirOptionTest {
 
 	private static final boolean MANDATORY = true;
 	
-	
-	public String pad(String s, int len) {
+
+	// pretty print
+	private String pad(String s, int len) {
 		while (s.length() < len)
 			s += "          ";
 		return s.substring(0, len-1);
 	}
+
 	
-	public void print(String s, int len) {
+	// pretty print
+	private void print(String s, int len) {
 		System.out.print(pad(s,len));
 	}
 
-	public static void print(String s) {
+	
+	// pretty print
+	private static void print(String s) {
 		System.out.print(s);
 	}
 
 	
-	public String getTempDirPath() throws IOException {
+	// pretty print
+	private String getTempDirPath() throws IOException {
 		File f = File.createTempFile("unit_test", "");
 		f.delete();
 		return f.getPath() + ".dir";
 	}
+
 	
+	// pretty print
 	@BeforeClass
     public static void pre() {
         print(String.format("Test Class: DirOptionTest%n"));        
@@ -50,12 +66,19 @@ public class DirOptionTest {
     }
 	
 
+	// pretty print
 	@AfterClass
     public static void post() {
         print(String.format("%n%n%n"));                
     }
 
-	@Test
+	
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */	@Test
 	public void test_basic() throws CommandLineException {
 		ArrayList<CheckedOption> options;
 		print(String.format("TESTING BASIC FUNCTIONALITY:%n"));
@@ -109,6 +132,12 @@ public class DirOptionTest {
 	}
 
 
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */
 	@Test
 	public void test_mustExist() throws IOException, CommandLineException {
 		print(String.format("TESTING EXISTANCE CHECKS:%n"));
@@ -170,6 +199,12 @@ public class DirOptionTest {
 	}
 
 
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 * @throws IOException
+	 */
 	@Test
 	public void test_create() throws IOException, CommandLineException {
 		print(String.format("TESTING CREATION:%n"));
