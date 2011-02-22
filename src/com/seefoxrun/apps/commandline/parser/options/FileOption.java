@@ -7,7 +7,27 @@ import com.seefoxrun.apps.commandline.parser.exceptions.ArgumentException;
 import com.seefoxrun.apps.commandline.parser.exceptions.CommandLineException;
 import com.seefoxrun.apps.commandline.parser.exceptions.OptionDefinitionException;
 
-
+/**
+ * A CheckedOption which supports file system files.  A FileOption's
+ * argument represents the path of a specific directory on the file system.
+ * <br><br>  
+ * Various checks are performed during command-line parsing.  The path, if 
+ * it already exists, must be a file or else an ArgumentException is 
+ * thrown.  If the path does not exist and this option's mustExist flag is 
+ * set, an ArgumentException is thrown.  Similar checks or placed on read 
+ * and write permissions.
+ * <br><br>
+ * FileOption does support tilde expansion for the user's home directory.
+ * But it only supports the current user.  Assuming the current process
+ * is being run by bill, Both ~/ and ~bill/ will expand correctly.  ~/susie
+ * will throw an ArgumentException.
+ * <br><br>
+ * The baseDir() method allows this option to accept relative paths.  
+ * Setting a base directory and using tilde expansion will throw an 
+ * ArgumentException. 
+ * <br><br>
+ * @author Brian Fox
+ */
 public class FileOption extends CheckedOption {
 
 	private boolean mustExist = false;

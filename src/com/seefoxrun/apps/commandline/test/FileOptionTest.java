@@ -19,6 +19,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+/**
+ * Tests FileOption class for correct handling of file
+ * existence checks, file creation, and basic functionality.
+ * 
+ * @author Brian Fox
+ */
 public class FileOptionTest {
 
 	private static final boolean MANDATORY = true;

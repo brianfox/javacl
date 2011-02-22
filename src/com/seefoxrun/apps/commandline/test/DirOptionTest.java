@@ -50,7 +50,7 @@ public class DirOptionTest {
 	}
 
 	
-	// pretty print
+	// gets a temporary directory
 	private String getTempDirPath() throws IOException {
 		File f = File.createTempFile("unit_test", "");
 		f.delete();

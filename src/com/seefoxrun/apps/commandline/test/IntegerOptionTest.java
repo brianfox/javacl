@@ -10,37 +10,45 @@ import com.seefoxrun.apps.commandline.parser.exceptions.OptionDefinitionExceptio
 import com.seefoxrun.apps.commandline.parser.options.CheckedOption;
 import com.seefoxrun.apps.commandline.parser.options.IntegerOption;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+/**
+ * Tests IntegerOption class for correct handling of integer
+ * command-line arguments.  Min and max values are tested
+ * as well.
+ * 
+ * @author Brian Fox
+ */
 public class IntegerOptionTest {
 
+	
+	// moniker for indicating a mandatory field
 	private static final boolean MANDATORY = true;
 	
-	
-	public String pad(String s, int len) {
+
+	// pretty print
+	private String pad(String s, int len) {
 		while (s.length() < len)
 			s += "          ";
 		return s.substring(0, len-1);
 	}
+
 	
-	public void print(String s, int len) {
+	// pretty print
+	private void print(String s, int len) {
 		System.out.print(pad(s,len));
 	}
 
-	public static void print(String s) {
+	
+	// pretty print
+	private static void print(String s) {
 		System.out.print(s);
 	}
 
 	
-	public String getTempFilePath() throws IOException {
-		File f = File.createTempFile("unit_test", "");
-		f.delete();
-		return f.getPath() + ".file";
-	}
-	
-	
+	// pretty print
 	@BeforeClass
     public static void pre() {
         print(String.format("Test Class: IntegerOptionTest%n"));        
@@ -48,13 +56,32 @@ public class IntegerOptionTest {
     }
 	
 
+	// pretty print
 	@AfterClass
     public static void post() {
         print(String.format("%n%n%n"));                
     }
 
 	
-	public void simpleTest(String title, int argument) throws CommandLineException {
+	// template test method: we expect an exception here
+	private void goodTest(
+			String title, 
+			String argument
+	) throws CommandLineException {
+
+		goodTest(title, argument, null, null);
+	}
+
+	
+	// template test method: we expect an exception here
+	// supports min and max
+	private void goodTest(
+			String title, 
+			String argument, 
+			Integer min, 
+			Integer max
+	) throws CommandLineException {
+
 		ArrayList<CheckedOption> options;
 		IntegerOption io;
 
@@ -66,11 +93,28 @@ public class IntegerOptionTest {
 		print(String.format("Result: %s%n", io.getValue()));
 		Integer i = io.getValue();
 		assertNotNull(i);
-		assertEquals((int)i,argument);
+		assertEquals((int)i,Integer.parseInt(argument));
 	}
 	
-	
-	public void badTest(String title, String argument) throws OptionDefinitionException {
+
+	// template test method: we expect an exception here
+	private void badTest(
+			String title, 
+			String argument
+	) throws OptionDefinitionException {
+
+		badTest(title, argument, null, null);
+	}
+
+
+	// template test method: we expect this to work
+	public void badTest(
+			String title, 
+			String argument,
+			Integer min, 
+			Integer max
+	) throws OptionDefinitionException {
+
 		ArrayList<CheckedOption> options;
 		IntegerOption io;
 
@@ -90,11 +134,11 @@ public class IntegerOptionTest {
 	@Test
 	public void test_basic() throws IOException, CommandLineException {
 		print(String.format("TESTING BASIC FUNCTIONALITY:%n"));
-		simpleTest("Test 1A: ", 0);
-		simpleTest("Test 1B: ", 1);
-		simpleTest("Test 1C: ", -1);
-		simpleTest("Test 1D: ", Integer.MAX_VALUE);
-		simpleTest("Test 1E: ", Integer.MIN_VALUE);
+		goodTest("Test 1A: ", "0");
+		goodTest("Test 1B: ", "1");
+		goodTest("Test 1C: ", "-1");
+		goodTest("Test 1D: ", "" + Integer.MAX_VALUE);
+		goodTest("Test 1E: ", "" + Integer.MIN_VALUE);
 		print(String.format("%n%n"));
 
 		print(String.format("TESTING BAD VALUES:%n"));
@@ -104,5 +148,18 @@ public class IntegerOptionTest {
 		print(String.format("%n%n"));
 	}
 
+	
+	/**
+	 * Yea Ole' Test.
+	 * 
+	 * @throws OptionDefinitionException
+	 */
+	@Test
+	public void test_range() throws CommandLineException {
+		print(String.format("TESTING RANGE:%n"));
+		goodTest("Test 1A: ", "0", -1, 1);
+		badTest("Test 1A: ", "2", -1, 1);
+		print(String.format("%n%n"));
+	}
 
 }
