@@ -88,7 +88,7 @@ public class FileOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(fo);
 		filename = getTempFilePath();
-		new Parser(options, new String[]{"-o" + filename});
+		new Parser(options, new String[]{"-o" + filename}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		File f = fo.getValue();
 		assertNotNull(f);
@@ -100,7 +100,7 @@ public class FileOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(fo);
 		filename = getTempFilePath();
-		new Parser(options, new String[]{"-o" + filename});
+		new Parser(options, new String[]{"-o" + filename}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		f = fo.getValue();
 		assertNotNull(f);
@@ -114,7 +114,7 @@ public class FileOptionTest {
 		fo.setExpandTilde(true);
 		options = new ArrayList<CheckedOption>();
 		options.add(fo);
-		new Parser(options, new String[]{"-o ~/never_make_this_file___"});
+		new Parser(options, new String[]{"-o ~/never_make_this_file___"}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		f = fo.getValue();
 		assertNotNull(f);
@@ -125,7 +125,7 @@ public class FileOptionTest {
 		fo.setExpandTilde(true);
 		options = new ArrayList<CheckedOption>();
 		options.add(fo);
-		new Parser(options, new String[]{"-o ~" + name + "/never_make_this_file___"});
+		new Parser(options, new String[]{"-o ~" + name + "/never_make_this_file___"}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		f = fo.getValue();
 		assertNotNull(f);
@@ -160,7 +160,7 @@ public class FileOptionTest {
 		fo.setMustExist(true);
 		options = new ArrayList<CheckedOption>();
 		options.add(fo);
-		new Parser(options, new String[]{"-o" + filename});
+		new Parser(options, new String[]{"-o" + filename}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		f = fo.getValue();
 		assertNotNull(f);
@@ -177,7 +177,7 @@ public class FileOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(fo);
 		try {
-			new Parser(options, new String[]{"-o" + filename});
+			new Parser(options, new String[]{"-o" + filename}).parse();
 			fail("Expected an error to be throw.");
 		}
 		catch (Exception e) {
@@ -200,7 +200,7 @@ public class FileOptionTest {
 		assertTrue(!f.isFile());
 		
 		try {
-			new Parser(options, new String[]{"-o" + foname});
+			new Parser(options, new String[]{"-o" + foname}).parse();
 			fail("Expected an error to be throw.");
 		}
 		catch (Exception e) {
@@ -235,7 +235,7 @@ public class FileOptionTest {
 		filename = getTempFilePath();
 		new File(filename).delete();
 
-		new Parser(options, new String[]{"-o" + filename});
+		new Parser(options, new String[]{"-o" + filename}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		f = new File(filename);
 		assertTrue(f.exists());
@@ -254,7 +254,7 @@ public class FileOptionTest {
 		filename = getTempFilePath();
 		new File(filename).createNewFile();
 
-		new Parser(options, new String[]{"-o" + filename});
+		new Parser(options, new String[]{"-o" + filename}).parse();
 		print(String.format("Result: %s%n", fo.getValue()));
 		f = new File(filename);
 		assertTrue(f.exists());

@@ -79,14 +79,14 @@ public class CheckedOptionTest {
 		print("Test 1A: Optional, omitted.",60);
 		options = new ArrayList<CheckedOption>();
 		options.add(new StringOption('o', "option", "My option", !MANDATORY));
-		new Parser(options, new String[]{});
+		new Parser(options, new String[]{}).parse();
 		print(String.format("Result: %s%n",options.get(0).getValue()));
 		assertNull(options.get(0).getValue());
 
 		print("Test 1B: Optional, provided.",60);
 		options = new ArrayList<CheckedOption>();
 		options.add(new StringOption('o', "option", "My option", !MANDATORY));
-		new Parser(options, new String[]{"-otest"});
+		new Parser(options, new String[]{"-otest"}).parse();
 		print(String.format("Result: %s%n",options.get(0).getValue()));
 		assertNotNull(options.get(0).getValue());
 
@@ -96,7 +96,7 @@ public class CheckedOptionTest {
 			options.add(new StringOption('o', "option", "My option", MANDATORY));
 			// testmode purposefully skips bottom turtle error detection and
 			// system exiting.
-			new Parser(options, new String[]{});   
+			new Parser(options, new String[]{}).parse();   
 			print(String.format("Result: %s%n",options.get(0).getValue()));
 			fail("Mandatory option omitted.");
 		} 
@@ -108,7 +108,7 @@ public class CheckedOptionTest {
 			print("Test 1D: Mandatory, provided.",60);
 			options = new ArrayList<CheckedOption>();
 			options.add(new StringOption('o', "option", "My option", MANDATORY));
-			new Parser(options, new String[]{"-otest"});
+			new Parser(options, new String[]{"-otest"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 			assertNotNull(options.get(0).getValue());
 		} 
@@ -128,7 +128,7 @@ public class CheckedOptionTest {
 			print("Test 2A: Argument required, provided, short form.",60);
 			options = new ArrayList<CheckedOption>();
 			options.add(new StringOption('o', "option", "My option", !MANDATORY));
-			new Parser(options, new String[]{"-o somestring"});
+			new Parser(options, new String[]{"-o somestring"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 		} 
 		catch (Exception e){
@@ -139,7 +139,7 @@ public class CheckedOptionTest {
 			print("Test 2B: Argument required, provided, long form.",60);
 			options = new ArrayList<CheckedOption>();
 			options.add(new StringOption('o', "option", "My option", !MANDATORY));
-			new Parser(options, new String[]{"--option=somestring"});
+			new Parser(options, new String[]{"--option=somestring"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 		} 
 		catch (Exception e){
@@ -150,7 +150,7 @@ public class CheckedOptionTest {
 			print("Test 2C: Argument required, omitted, short form.",60);
 			options = new ArrayList<CheckedOption>();
 			options.add(new StringOption('o', "option", "My option", MANDATORY));
-			new Parser(options, new String[]{"-o"});
+			new Parser(options, new String[]{"-o"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 			fail("Mandatory option omitted.");
 		} 
@@ -163,7 +163,7 @@ public class CheckedOptionTest {
 			print("Test 2D: Argument required, omitted, long form.",60);
 			options = new ArrayList<CheckedOption>();
 			options.add(new StringOption('o', "option", "My option", MANDATORY));
-			new Parser(options, new String[]{"--option"});
+			new Parser(options, new String[]{"--option"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 			fail("Mandatory option omitted.");
 		} 
@@ -189,14 +189,14 @@ public class CheckedOptionTest {
 		print("Test 3A. Flag omitted, short form.",60);
 		options = new ArrayList<CheckedOption>();
 		options.add(new FlagOption('o', "option", "My option"));
-		new Parser(options, new String[]{});
+		new Parser(options, new String[]{}).parse();
 		assertEquals((Boolean)options.get(0).getValue(), false);
 		print(String.format("Result: %s%n",options.get(0).getValue()));
 
 		print("Test 3B. Flag omitted, long form.",60);
 		options = new ArrayList<CheckedOption>();
 		options.add(new FlagOption('o', "option", "My option"));
-		new Parser(options, new String[]{});
+		new Parser(options, new String[]{}).parse();
 		assertEquals((Boolean)options.get(0).getValue(), false);
 		print(String.format("Result: %s%n",options.get(0).getValue()));
 
@@ -204,14 +204,14 @@ public class CheckedOptionTest {
 		print("Test 3C. Flag provided, short form.",60);
 		options = new ArrayList<CheckedOption>();
 		options.add(new FlagOption('o', "option", "My option"));
-		new Parser(options, new String[]{"-o"});
+		new Parser(options, new String[]{"-o"}).parse();
 		assertEquals((Boolean)options.get(0).getValue(), true);
 		print(String.format("Result: %s%n",options.get(0).getValue()));
 
 		print("Test 3D. Flag provided, long form.",60);
 		options = new ArrayList<CheckedOption>();
 		options.add(new FlagOption('o', "option", "My option"));
-		new Parser(options, new String[]{"--option"});
+		new Parser(options, new String[]{"--option"}).parse();
 		assertEquals((Boolean)options.get(0).getValue(), true);
 		print(String.format("Result: %s%n",options.get(0).getValue()));
 
@@ -219,7 +219,7 @@ public class CheckedOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(new FlagOption('o', "option", "My option"));
 		try {
-			new Parser(options, new String[]{"-o1"});
+			new Parser(options, new String[]{"-o1"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 			fail("A flag should not allow an argument to be provided.");
 		} 
@@ -232,7 +232,7 @@ public class CheckedOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(new FlagOption('o', "option", "My option"));
 		try {
-			new Parser(options, new String[]{"-o1"});
+			new Parser(options, new String[]{"-o1"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 			fail("A flag should not allow an argument to be provided.");
 		} 
@@ -261,7 +261,7 @@ public class CheckedOptionTest {
 		options.add(new FlagOption('a', "aoption", "My a option"));
 		options.add(new FlagOption('b', "aoption", "My b option"));
 		options.add(new FlagOption('c', "aoption", "My c option"));
-		new Parser(options, new String[]{"-abc"});
+		new Parser(options, new String[]{"-abc"}).parse();
 		assertEquals((Boolean)options.get(0).getValue(), true);
 		assertEquals((Boolean)options.get(1).getValue(), true);
 		assertEquals((Boolean)options.get(2).getValue(), true);
@@ -274,7 +274,7 @@ public class CheckedOptionTest {
 		options.add(new FlagOption('b', "aoption", "My b option"));
 		options.add(new FlagOption('c', "aoption", "My c option"));
 		try {
-			new Parser(options, new String[]{"-o1"});
+			new Parser(options, new String[]{"-o1"}).parse();
 			print(String.format("Result: %s%n", options.get(0).getValue()));
 			fail("A flag should not allow an argument to be provided.");
 		} 
@@ -289,7 +289,7 @@ public class CheckedOptionTest {
 		options.add(new StringOption('a', "aoption", "My a option", false));
 		options.add(new StringOption('b', "aoption", "My b option", false));
 		options.add(new StringOption('c', "aoption", "My c option", false));
-		new Parser(options, new String[]{"-abc"});
+		new Parser(options, new String[]{"-abc"}).parse();
 		print(String.format("Result: %s %s %s%n",
 				options.get(0).getValue(),
 				options.get(1).getValue(),
@@ -302,7 +302,7 @@ public class CheckedOptionTest {
 		options.add(new StringOption('a', "aoption", "My a option", false));
 		options.add(new StringOption('b', "aoption", "My b option", false));
 		options.add(new StringOption('c', "aoption", "My c option", false));
-		new Parser(options, new String[]{"-abcargument"});
+		new Parser(options, new String[]{"-abcargument"}).parse();
 		print(String.format("Result: %s %s %s%n",
 				options.get(0).getValue(),
 				options.get(1).getValue(),

@@ -89,7 +89,7 @@ public class IntegerOptionTest {
 		io = new IntegerOption('o', "option", "My option", MANDATORY);
 		options = new ArrayList<CheckedOption>();
 		options.add(io);
-		new Parser(options, new String[]{"-o" + new Integer(argument).toString()});
+		new Parser(options, new String[]{"-o" + new Integer(argument).toString()}).parse();
 		print(String.format("Result: %s%n", io.getValue()));
 		Integer i = io.getValue();
 		assertNotNull(i);
@@ -123,7 +123,7 @@ public class IntegerOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(io);
 		try {
-			new Parser(options, new String[]{"-o" + argument});
+			new Parser(options, new String[]{"-o" + argument}).parse();
 		}
 		catch (Exception e){
 			print(String.format("Result: Error: %s%n", e.getMessage()));

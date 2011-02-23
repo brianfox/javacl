@@ -6,6 +6,7 @@ import org.junit.* ;
 
 import com.seefoxrun.app.commandline.CommandLineApp;
 import com.seefoxrun.app.commandline.parser.Parser;
+import com.seefoxrun.app.commandline.parser.exceptions.CommandLineException;
 import com.seefoxrun.app.commandline.parser.exceptions.OptionDefinitionException;
 import com.seefoxrun.app.commandline.parser.options.BooleanOption;
 import com.seefoxrun.app.commandline.parser.options.CheckedOption;
@@ -76,7 +77,7 @@ public class BooleanOptionTest {
 			String title, 
 			String argument, 
 			boolean expected
-	) throws OptionDefinitionException {
+	) throws CommandLineException {
 
 		ArrayList<CheckedOption> options;
 		BooleanOption bo;
@@ -86,7 +87,7 @@ public class BooleanOptionTest {
 		bo = new BooleanOption('o', "option", "My option", MANDATORY);
 		options = new ArrayList<CheckedOption>();
 		options.add(bo);
-		new CommandLineApp(options, new String[]{"-o" + argument});
+		new Parser(options, new String[]{"-o" + argument}).parse();
 		print(String.format("Result: %s%n", bo.getValue()));
 		b = bo.getValue();
 		assertNotNull(b);
@@ -112,7 +113,7 @@ public class BooleanOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(bo);
 		try {
-			new Parser(options, new String[]{"-o" + argument});
+			new Parser(options, new String[]{"-o" + argument}).parse();
 			fail("Expected an error to be throw.");
 		}
 		catch (Exception e) {
@@ -126,11 +127,11 @@ public class BooleanOptionTest {
 	/**
 	 * Yea Ole' Test.
 	 * 
-	 * @throws OptionDefinitionException
 	 * @throws IOException
+	 * @throws CommandLineException 
 	 */
 	@Test
-	public void test_basic() throws OptionDefinitionException, IOException {
+	public void test_basic() throws IOException, CommandLineException {
 		print(String.format("TESTING NEGATIVE FUNCTIONALITY:%n"));
 		simpleTest("Test 1A: Negative", "0", false);
 		simpleTest("Test 1B: Negative", "n", false);

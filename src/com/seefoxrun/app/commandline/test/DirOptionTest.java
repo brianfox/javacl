@@ -86,7 +86,7 @@ public class DirOptionTest {
 		DirOption dir = new DirOption('o', "option", "My option", MANDATORY);
 		options = new ArrayList<CheckedOption>();
 		options.add(dir);
-		new Parser(options, new String[]{"-o/tmp/"});
+		new Parser(options, new String[]{"-o/tmp/"}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		File f = dir.getValue();
 		assertNotNull(f);
@@ -97,7 +97,7 @@ public class DirOptionTest {
 		dir.setBaseDir("/basedir/");
 		options = new ArrayList<CheckedOption>();
 		options.add(dir);
-		new Parser(options, new String[]{"-o/relativedir/"});
+		new Parser(options, new String[]{"-o/relativedir/"}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		f = dir.getValue();
 		assertNotNull(f);
@@ -111,7 +111,7 @@ public class DirOptionTest {
 		dir.setExpandTilde(true);
 		options = new ArrayList<CheckedOption>();
 		options.add(dir);
-		new Parser(options, new String[]{"-o ~/help"});
+		new Parser(options, new String[]{"-o ~/help"}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		f = dir.getValue();
 		assertNotNull(f);
@@ -122,7 +122,7 @@ public class DirOptionTest {
 		dir.setExpandTilde(true);
 		options = new ArrayList<CheckedOption>();
 		options.add(dir);
-		new Parser(options, new String[]{"-o ~" + name + "/help2"});
+		new Parser(options, new String[]{"-o ~" + name + "/help2"}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		f = dir.getValue();
 		assertNotNull(f);
@@ -151,7 +151,7 @@ public class DirOptionTest {
 		dir.setMustExist(true);
 		options = new ArrayList<CheckedOption>();
 		options.add(dir);
-		new Parser(options, new String[]{"-o/tmp/"});
+		new Parser(options, new String[]{"-o/tmp/"}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		f = dir.getValue();
 		assertNotNull(f);
@@ -164,7 +164,7 @@ public class DirOptionTest {
 		options = new ArrayList<CheckedOption>();
 		options.add(dir);
 		try {
-			new Parser(options, new String[]{"-o/tmp_fake/"});
+			new Parser(options, new String[]{"-o/tmp_fake/"}).parse();
 			fail("Expected an error to be throw.");
 		}
 		catch (Exception e) {
@@ -188,7 +188,7 @@ public class DirOptionTest {
 		assertTrue(f.isFile());
 		
 		try {
-			new Parser(options, new String[]{"-o" + dirname});
+			new Parser(options, new String[]{"-o" + dirname}).parse();
 			fail("Expected an error to be throw.");
 		}
 		catch (Exception e) {
@@ -222,7 +222,7 @@ public class DirOptionTest {
 		String dirname = getTempDirPath();
 		new File(dirname).delete();
 
-		new Parser(options, new String[]{"-o" + dirname});
+		new Parser(options, new String[]{"-o" + dirname}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		f = new File(dirname);
 		assertTrue(f.exists());
@@ -241,7 +241,7 @@ public class DirOptionTest {
 		dirname = getTempDirPath();
 		new File(dirname).mkdirs();
 
-		new Parser(options, new String[]{"-o" + dirname});
+		new Parser(options, new String[]{"-o" + dirname}).parse();
 		print(String.format("Result: %s%n", dir.getValue()));
 		f = new File(dirname);
 		assertTrue(f.exists());

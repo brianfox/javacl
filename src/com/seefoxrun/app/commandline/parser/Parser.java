@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.seefoxrun.app.commandline.parser.exceptions.CommandLineException;
+import com.seefoxrun.app.commandline.parser.exceptions.OptionDefinitionException;
 import com.seefoxrun.app.commandline.parser.exceptions.RequiredOptionException;
 import com.seefoxrun.app.commandline.parser.exceptions.UndefinedOptionException;
 import com.seefoxrun.app.commandline.parser.options.CheckedOption;
+import com.seefoxrun.app.commandline.parser.options.FlagOption;
 
 
 public class Parser {
@@ -14,10 +16,11 @@ public class Parser {
 	// listedOptions is provided as a constructor argument.  
 	// mappedOptions is a lookup table of the same listedOptions.
 	
-	ArrayList<CheckedOption> listedOptions;
-	HashMap<String,CheckedOption> mappedOptions;  
-	String commandLine;
-	boolean testMode = false;
+	private ArrayList<CheckedOption> listedOptions;
+	private HashMap<String,CheckedOption> mappedOptions;  
+	private String[] commandLine;
+	private boolean useGNU_4_7 = true;
+
 	
 	/**
 	 * Squashed default constructor.  
@@ -26,22 +29,65 @@ public class Parser {
 	private Parser() {
 	}
 	
+
+	public Parser(
+			ArrayList<CheckedOption> options, 
+			String[] commandLine 
+	) {
+		this.listedOptions = options;
+		this.commandLine = commandLine;
+	}
 	
-	public Parser(ArrayList<CheckedOption> options, String[] args) throws CommandLineException {
-		listedOptions = options;
-		commandLine = cat(args);
+	public void parse() throws CommandLineException {
+		FlagOption help = null;
+		FlagOption version = null;
+		String _commandLine;
+		
+		_commandLine = cat(commandLine);
 		mappedOptions = mapOptions(listedOptions);
-		parseCommandLine();
+
+		if (useGNU_4_7) {
+			if (!mappedOptions.containsKey('v') && !mappedOptions.containsKey("version")) {
+				version = new FlagOption(
+						'v', 
+						"version", 
+						"print version information and exit"
+				);
+				listedOptions.add(version);
+			}
+			if (!mappedOptions.containsKey('h') && !mappedOptions.containsKey("help")) {
+				help = new FlagOption(
+						'h', 
+						"help", 
+						"display this help and exit"
+				);
+				listedOptions.add(help);
+			}
+			mappedOptions = mapOptions(listedOptions);
+		}
+
+		
+		parseCommandLine(_commandLine);
+
+		boolean exit = false;
+		if (version != null && version.getValue()) {
+			System.out.println(version());
+			exit = true;
+		}
+		if (help != null && help.getValue()) {
+			System.out.println(usage("xyzzy"));
+			exit = true;
+		}
+		
 	}
 
 	
 	/**
 	 * Returns a nice usage string suitable for framing.
-	 * @todo document this
 	 */
-	public String usage() {
+	public String usage(String programName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Usage: " + "program " + " [OPTIONS]... FILES%n"));
+		sb.append(String.format("Usage: " + programName + " [OPTION]...%n"));
 		sb.append(String.format("Some description%n"));
 		sb.append(String.format("%n"));
 		sb.append(String.format("%s%n", optUsage()));
@@ -49,11 +95,17 @@ public class Parser {
 	}
 
 	
+	public String version() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Version%n"));
+		return sb.toString();
+	}
+	
 	/**
 	 * Parses the command line arguments in accordance to POSIX and
 	 * GNU guidelines.
 	 */
-	public void parseCommandLine() throws CommandLineException {
+	public void parseCommandLine(String commandLine) throws CommandLineException {
 		try {
 			String[] rough = commandLine.split("^--|\\s+--");
 			// rough = { 
@@ -176,13 +228,15 @@ public class Parser {
 	 * @return the CheckedOptions arranged in a HashMap.
 	 */
 	private HashMap<String,CheckedOption> mapOptions(ArrayList<CheckedOption> options) {
+			
 		HashMap<String,CheckedOption> ret = new HashMap<String,CheckedOption>();
-		for (CheckedOption o : options) {
-			if (o.getLongOpt() != null)
-				ret.put(o.getLongOpt(), o);
-			if (o.getShortOpt() != null)
-				ret.put(o.getShortOpt().toString(), o);
-		}
+		if (options != null)
+			for (CheckedOption o : options) {
+				if (o.getLongOpt() != null)
+					ret.put(o.getLongOpt(), o);
+				if (o.getShortOpt() != null)
+					ret.put(o.getShortOpt().toString(), o);
+			}
 		return ret;
 	}
 	
@@ -246,7 +300,7 @@ public class Parser {
 				next = String.format("-%s", sh);
 			else
 				next = String.format("-%s  --%s", sh, lo);
-			sb.append(pad(next, 0, 70, true));
+			//sb.append(pad(next, 0, 70, true));
 			sb.append(pad(o.getDescription(), 7, 70, true));
 			sb.append(String.format("%n"));
 		}

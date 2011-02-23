@@ -18,7 +18,11 @@ public class CommandLineApp {
 	}
 	
 	
-	public CommandLineApp(ArrayList<CheckedOption> options, String[] args) {
+	public CommandLineApp(
+			ArrayList<CheckedOption> options, 
+			String[] args
+	) {
+		
 		try {
 			parser = new Parser(options, args);
 		}
@@ -29,11 +33,4 @@ public class CommandLineApp {
 	}
 
 	
-	/**
-	 * Returns a nice usage string suitable for framing.
-	 * @todo document this
-	 */
-	public String usage() {
-		return parser.usage();
-	}
 }
